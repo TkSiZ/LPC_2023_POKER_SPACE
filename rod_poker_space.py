@@ -1,5 +1,6 @@
 #Atividade 0010 -
 
+import random
 import pygame
 
 pygame.init()
@@ -30,6 +31,8 @@ shots_text_rect.center = (scrn_x - 22, scrn_y - 22)
 
 # bullets
 bullets = []
+velocity_bullets_x = []
+velocity_bullets_y = []
 
 # victory text
 
@@ -41,7 +44,7 @@ def draw_bullets():
         pygame.draw.rect(screen, COLOR_WHITE, bullet)
 
 # phase 1 enemy(copas)
-image_copas = pygame.image.load("assets/copas.png")
+image_copas = pygame.image.load("assets/heart_enemy.png")
 image_copas_rect = image_copas.get_rect()
 image_copas_rect.topleft = (scrn_x/2 - (image_copas_rect.width/2), 0)
 image_copas_mask = pygame.mask.from_surface(image_copas)
@@ -59,7 +62,7 @@ image_espadas_rect.topleft = (scrn_x/2 - (image_espadas_rect.width/2), 0)
 image_espadas_mask = pygame.mask.from_surface(image_espadas)
 
 # phase 4 enemy(ouros)
-image_ball = pygame.image.load("assets/ball.png")
+image_ball = pygame.image.load("assets/copas.png")
 image_ball_rect = image_ball.get_rect()
 image_ball_rect.topleft = (scrn_x/2 - (image_ball_rect.width/2), 0)
 image_ball_mask = pygame.mask.from_surface(image_ball)
@@ -173,7 +176,7 @@ p_1_move_left = False
 
 # game speed
 speed = 60
-
+mask_aux = pygame.mask.from_surface(image_ball)
 # ball
 ball = pygame.image.load("assets/ball.png")
 ball_x = 640
@@ -189,7 +192,7 @@ shot_2 = 5
 # game loop
 game_loop = True
 game_clock = pygame.time.Clock()
-phase = 3
+phase = 1
 while game_loop:
 
     for event in pygame.event.get():
@@ -207,6 +210,9 @@ while game_loop:
                 player_shots -= 1
                 bullet = pygame.Rect(p_top_x + p_1_colision_x_size // 50 - 4, p_sides_y, 8, 6)
                 bullets.append(bullet)
+                velocity_bullets_y.append(-5)
+                velocity_bullets_x.append(0)
+
 
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_LEFT:
@@ -219,19 +225,47 @@ while game_loop:
     # clear screen
 
     screen.fill(COLOR_BLACK)
+    # ball collision with the wall left and right
+    i=0
+    for bullet in bullets:
+        if (bullet.x + bullet.width) >= 840 and velocity_bullets_x[i]>0:
+            velocity_bullets_x[i] *= -1
+        if bullet.x <= 0 and velocity_bullets_x[i]<0:
+            velocity_bullets_x[i] *= -1
+        i+=1
+    # ball collision with the rectangle (phase 1)
 
-    # ball collision with the lower/upper wall
-
+    if phase == 2:
+        i = 0
+        for bullet in bullets:
+            if bullet.colliderect(triangle_3_rect):
+                velocity_bullets_y[i] *= -1
+            i += 1
+    # ball collision with the lower/upper wall phase 1
+    # ball collision with the lower wall player 1
+    i = 0
+    for bullet, v_bullet_y in zip(bullets, velocity_bullets_y):
+        if (bullet.y + bullet.height) >= 640:
+            velocity_bullets_y[i] *= -1
+            velocity_bullets_x[i] = random.choice([2, -2])
+        if (bullet.y + bullet.height) <= 0:
+            velocity_bullets_y[i] *= -1
+            velocity_bullets_x[i] = random.choice([2, -2])
+        i+=1
     # ball collision with the player 1
 
     # ball collision with the enemy
 
     # ball movement
-    for bullet in bullets:
-        bullet.y -= 5
+    for bullet, v_bullet_y, v_bullet_x in zip(bullets, velocity_bullets_y, velocity_bullets_x):
+        bullet.y += v_bullet_y
+        bullet.x += v_bullet_x
         # Removes shots that leave the screen
         if bullet.y < 0:
-            bullets.remove(bullet)
+            print("a")
+            #bullets.remove(bullet)
+            #velocity_bullets_y.remove(v_bullet_y)
+            #velocity_bullets_x.remove(v_bullet_x)
     # player 1 left movement
     if p_1_move_left:
         p_left_x -= 5
