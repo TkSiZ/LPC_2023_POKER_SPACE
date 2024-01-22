@@ -33,6 +33,7 @@ shots_text_rect.center = (scrn_x - 22, scrn_y - 22)
 bullets = []
 velocity_bullets_x = []
 velocity_bullets_y = []
+deteccao_anterior = []
 
 # victory text
 
@@ -92,14 +93,10 @@ triangle_3_left_mask = pygame.mask.from_surface(triangle_3_left)
 
 # triangle right
 triangle_3_right = pygame.image.load("assets/Triangulo_canto_direito.png")
-triangle_3_right_x = scrn_x / 2 - 450
-triangle_3_right_y = scrn_y / 2 + 85
-triangle_3_right_rect = triangle_3_right.get_rect(topleft=(triangle_3_right_x, triangle_3_right_y))
-triangle_3_right_mask = pygame.mask.from_surface(triangle_3_right)
-
-triangle_3_right = pygame.image.load("assets/Triangulo_canto_direito.png")
 triangle_3_right_x = scrn_x - 214
 triangle_3_right_y = 30
+triangle_3_right_rect = triangle_3_right.get_rect(topleft=(triangle_3_right_x, triangle_3_right_y))
+triangle_3_right_mask = pygame.mask.from_surface(triangle_3_right)
 
 
 # phase 3 obstacles
@@ -192,7 +189,7 @@ shot_2 = 5
 # game loop
 game_loop = True
 game_clock = pygame.time.Clock()
-phase = 1
+phase = 2
 while game_loop:
 
     for event in pygame.event.get():
@@ -212,6 +209,7 @@ while game_loop:
                 bullets.append(bullet)
                 velocity_bullets_y.append(-5)
                 velocity_bullets_x.append(0)
+                deteccao_anterior.append(False)
 
 
         if event.type == pygame.KEYUP:
@@ -234,12 +232,70 @@ while game_loop:
             velocity_bullets_x[i] *= -1
         i+=1
     # ball collision with the rectangle (phase 1)
+    if phase == 1:
+        i=0
+        for bullet in bullets:
+            if bullet.colliderect(retangle_1):
+                velocity_bullets_y[i]*=-1
+                velocity_bullets_x[i] = random.choice([3, -3])
+                pygame.time.delay(50)
 
-    if phase == 2:
+            i+=1
+    # ball collision with the triangles (phase 2)
+    elif phase == 2:
         i = 0
         for bullet in bullets:
-            if bullet.colliderect(triangle_3_rect):
+            if bullet.colliderect(triangle_3_rect) and (not deteccao_anterior[i]):
+
+                deteccao_anterior[i] = True
                 velocity_bullets_y[i] *= -1
+                if velocity_bullets_x[i] == 0:
+                    velocity_bullets_x[i] = random.choice([3, -3])
+                else:
+                    velocity_bullets_x[i]*=random.choice([1, -1])
+            elif (not bullet.colliderect(triangle_3_rect)) and deteccao_anterior[i]:
+                deteccao_anterior[i] = False
+            i += 1
+        i = 0
+        for bullet in bullets:
+            if bullet.colliderect(triangle_3_left_rect) and (not deteccao_anterior[i]):
+
+                deteccao_anterior[i] = True
+                velocity_bullets_y[i] *= -1
+                if velocity_bullets_x[i] == 0:
+                    velocity_bullets_x[i] = random.choice([3, -3])
+                else:
+                    velocity_bullets_x[i] *= random.choice([1, -1])
+            elif (not bullet.colliderect(triangle_3_left_rect)) and deteccao_anterior[i]:
+                deteccao_anterior[i] = False
+            i += 1
+        i=0
+        for bullet in bullets:
+            if bullet.colliderect(triangle_3_right_rect) and (not deteccao_anterior[i]):
+
+                deteccao_anterior[i] = True
+                velocity_bullets_y[i] *= -1
+                if velocity_bullets_x[i] == 0:
+                    velocity_bullets_x[i] = random.choice([3, -3])
+                else:
+                    velocity_bullets_x[i] *= random.choice([1, -1])
+            elif (not bullet.colliderect(triangle_3_right_rect)) and deteccao_anterior[i]:
+
+                deteccao_anterior[i] = False
+            i += 1
+    elif phase == 3:
+        i = 0
+        for bullet in bullets:
+            if bullet.colliderect(triangle_3_rect) and (not deteccao_anterior[i]):
+
+                deteccao_anterior[i] = True
+                velocity_bullets_y[i] *= -1
+                if velocity_bullets_x[i] == 0:
+                    velocity_bullets_x[i] = random.choice([3, -3])
+                else:
+                    velocity_bullets_x[i] *= random.choice([1, -1])
+            elif (not bullet.colliderect(triangle_3_rect)) and deteccao_anterior[i]:
+                deteccao_anterior[i] = False
             i += 1
     # ball collision with the lower/upper wall phase 1
     # ball collision with the lower wall player 1
@@ -247,10 +303,10 @@ while game_loop:
     for bullet, v_bullet_y in zip(bullets, velocity_bullets_y):
         if (bullet.y + bullet.height) >= 640:
             velocity_bullets_y[i] *= -1
-            velocity_bullets_x[i] = random.choice([2, -2])
+            #velocity_bullets_x[i] = random.choice([2, -2])
         if (bullet.y + bullet.height) <= 0:
             velocity_bullets_y[i] *= -1
-            velocity_bullets_x[i] = random.choice([2, -2])
+            #velocity_bullets_x[i] = random.choice([2, -2])
         i+=1
     # ball collision with the player 1
 
@@ -261,8 +317,7 @@ while game_loop:
         bullet.y += v_bullet_y
         bullet.x += v_bullet_x
         # Removes shots that leave the screen
-        if bullet.y < 0:
-            print("a")
+        #if bullet.y < 0:
             #bullets.remove(bullet)
             #velocity_bullets_y.remove(v_bullet_y)
             #velocity_bullets_x.remove(v_bullet_x)
