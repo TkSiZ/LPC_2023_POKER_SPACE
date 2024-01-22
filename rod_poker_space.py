@@ -27,13 +27,18 @@ shots_font = pygame.font.Font('assets/PressStart2P.ttf', 22)
 shots_text = shots_font.render('5', True, COLOR_WHITE, COLOR_BLACK)
 shots_text_rect = shots_text.get_rect()
 shots_text_rect.center = (scrn_x - 22, scrn_y - 22)
+
+# bullets
+bullets = []
+
 # victory text
 
 # lost text
 
-
-
-
+# Function to draw the shots on the screen
+def draw_bullets():
+    for bullet in bullets:
+        pygame.draw.rect(screen, COLOR_WHITE, bullet)
 
 # phase 1 enemy(copas)
 image_copas = pygame.image.load("assets/copas.png")
@@ -41,6 +46,23 @@ image_copas_rect = image_copas.get_rect()
 image_copas_rect.topleft = (scrn_x/2 - (image_copas_rect.width/2), 0)
 image_copas_mask = pygame.mask.from_surface(image_copas)
 
+# phase 2 enemy(paus)
+image_paus = pygame.image.load("assets/paus.png")
+image_paus_rect = image_paus.get_rect()
+image_paus_rect.topleft = (scrn_x/2 - (image_paus_rect.width/2), 0)
+image_paus_mask = pygame.mask.from_surface(image_paus)
+
+# phase 3 enemy(espadas)
+image_espadas = pygame.image.load("assets/espadas.png")
+image_espadas_rect = image_espadas.get_rect()
+image_espadas_rect.topleft = (scrn_x/2 - (image_espadas_rect.width/2), 0)
+image_espadas_mask = pygame.mask.from_surface(image_espadas)
+
+# phase 4 enemy(ouros)
+image_ball = pygame.image.load("assets/ball.png")
+image_ball_rect = image_ball.get_rect()
+image_ball_rect.topleft = (scrn_x/2 - (image_ball_rect.width/2), 0)
+image_ball_mask = pygame.mask.from_surface(image_ball)
 
 # phase 1 obstacles
 retangle_1_x = 335
@@ -60,15 +82,18 @@ triangle_3_mid_mask = pygame.mask.from_surface(triangle_3_mid)
 
 # triangle left
 triangle_3_left = pygame.image.load("assets/Triangulo_canto_esquerdo.png")
-triangle_3_left_x = scrn_x / 2 - 450
-triangle_3_left_y = scrn_y / 2 + 85
-triangle_3_left_rect = triangle_3_mid.get_rect(topleft=(triangle_3_mid_x, triangle_3_mid_y))
+triangle_3_left_x = 0
+triangle_3_left_y = scrn_y / 2 + 70
+triangle_3_left_rect = triangle_3_left.get_rect(topleft=(triangle_3_left_x, triangle_3_left_y))
 triangle_3_left_mask = pygame.mask.from_surface(triangle_3_left)
 
-
-
-
 # triangle right
+triangle_3_right = pygame.image.load("assets/Triangulo_canto_direito.png")
+triangle_3_right_x = scrn_x / 2 - 450
+triangle_3_right_y = scrn_y / 2 + 85
+triangle_3_right_rect = triangle_3_right.get_rect(topleft=(triangle_3_right_x, triangle_3_right_y))
+triangle_3_right_mask = pygame.mask.from_surface(triangle_3_right)
+
 triangle_3_right = pygame.image.load("assets/Triangulo_canto_direito.png")
 triangle_3_right_x = scrn_x - 214
 triangle_3_right_y = 30
@@ -164,7 +189,7 @@ shot_2 = 5
 # game loop
 game_loop = True
 game_clock = pygame.time.Clock()
-phase = 2
+phase = 3
 while game_loop:
 
     for event in pygame.event.get():
@@ -177,6 +202,12 @@ while game_loop:
                 p_1_move_left = True
             if event.key == pygame.K_RIGHT:
                 p_1_move_right = True
+                # Adds a shot to the list when the spacebar is pressed
+            if event.key == pygame.K_SPACE and player_shots > 0:
+                player_shots -= 1
+                bullet = pygame.Rect(p_top_x + p_1_colision_x_size // 50 - 4, p_sides_y, 8, 6)
+                bullets.append(bullet)
+
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_LEFT:
                 p_1_move_left = False
@@ -196,7 +227,11 @@ while game_loop:
     # ball collision with the enemy
 
     # ball movement
-
+    for bullet in bullets:
+        bullet.y -= 5
+        # Removes shots that leave the screen
+        if bullet.y < 0:
+            bullets.remove(bullet)
     # player 1 left movement
     if p_1_move_left:
         p_left_x -= 5
@@ -240,31 +275,33 @@ while game_loop:
     screen.blit(player_life, (player_life_x + 60, player_life_y))
     # phase 1 obstacle
     if phase == 1:
-        screen.blit(image_copas, image_copas_rect);
+        screen.blit(image_copas, image_copas_rect)
         pygame.draw.rect(screen, COLOR_WHITE, retangle_1)
 
     # phase 2 obstacles
     elif phase == 2:
-
+        screen.blit(image_paus, image_paus_rect)
         screen.blit(triangle_3_mid, (triangle_3_mid_x, triangle_3_mid_y))
         screen.blit(triangle_3_left, (triangle_3_left_x, triangle_3_left_y))
-        #screen.blit(triangle_right, (triangle_right_x, triangle_right_y))
+        screen.blit(triangle_3_right, (triangle_3_right_x, triangle_3_right_y))
 
     # phase 3 obstacles
-    #elif phase == 3:
+    elif phase == 3:
+        screen.blit(image_espadas, image_espadas_rect)
 
-        # pygame.draw.rect(screen, COLOR_WHITE, retangle_3_r)
-        # pygame.draw.rect(screen, COLOR_WHITE, retangle_3_l)
-        # pygame.draw.rect(screen, COLOR_WHITE, square_3)
+        pygame.draw.rect(screen, COLOR_WHITE, retangle_3_r)
+        pygame.draw.rect(screen, COLOR_WHITE, retangle_3_l)
+        pygame.draw.rect(screen, COLOR_WHITE, square_3)
 
     # phase 4 obstacles
     else:
+        screen.blit(image_ball, image_ball_rect)
         pygame.draw.rect(screen, COLOR_WHITE, square_4_mid)
         screen.blit(diagonal_bottom_left, (diagonal_bottom_left_x, diagonal_bottom_left_y))
         screen.blit(diagonal_top_right, (diagonal_top_right_x, diagonal_top_right_y))
         screen.blit(diagonal_top_left, (diagonal_top_left_x, diagonal_top_left_y))
         screen.blit(diagonal_bottom_right, (diagonal_bottom_right_x, diagonal_bottom_right_y))
-
+    draw_bullets()
     # update screen
     pygame.display.flip()
     game_clock.tick(speed)
