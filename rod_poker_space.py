@@ -152,8 +152,8 @@ diagonal_bottom_right_y = diagonal_bottom_left_y
 
 
 # Sound effects
-# victory_sound_effect = pygame.mixer.Sound('...')
-# lost_sound_effect = pygame.mixer.Sound('...')
+victory_sound_effect = pygame.mixer.Sound('assets/victory.wav')
+lost_sound_effect = pygame.mixer.Sound('assets/defeat.wav')
 shot_sound_effect = pygame.mixer.Sound('assets/shot.wav')
 bounce_sound_effect = pygame.mixer.Sound('assets/bounce.wav')
 
