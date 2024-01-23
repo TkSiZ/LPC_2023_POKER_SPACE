@@ -431,7 +431,7 @@ while game_loop:
 
         if current_time - last_enemy_bullet_time > enemy_bullet_cooldown:
             # Adicione uma bala do inimigo
-            enemy_bullet = pygame.Rect(image_copas_rect.centerx, image_copas_rect.centery, 8, 6)
+            enemy_bullet = pygame.Rect(image_paus_rect.centerx, image_paus_rect.centery, 8, 6)
             enemy_bullets.append(enemy_bullet)
 
             # Determine a direção do tiro do inimigo
@@ -495,7 +495,7 @@ while game_loop:
             i += 1
         if current_time - last_enemy_bullet_time > enemy_bullet_cooldown:
             # Adicione uma bala do inimigo
-            enemy_bullet = pygame.Rect(image_copas_rect.centerx, image_copas_rect.centery, 8, 6)
+            enemy_bullet = pygame.Rect(image_espadas_rect.centerx, image_espadas_rect.centery, 8, 6)
             enemy_bullets.append(enemy_bullet)
 
             # Determine a direção do tiro do inimigo
