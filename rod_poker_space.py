@@ -155,7 +155,7 @@ diagonal_bottom_right_y = diagonal_bottom_left_y
 # victory_sound_effect = pygame.mixer.Sound('...')
 # lost_sound_effect = pygame.mixer.Sound('...')
 shot_sound_effect = pygame.mixer.Sound('assets/shot.wav')
-# bounce_sound_effect = pygame.mixer.Sound('assets/bounce.wav')
+bounce_sound_effect = pygame.mixer.Sound('assets/bounce.wav')
 
 # Player 1
 p_top_x = scrn_x / 2
@@ -228,8 +228,10 @@ while game_loop:
     for bullet in bullets:
         if (bullet.x + bullet.width) >= 840 and velocity_bullets_x[i]>0:
             velocity_bullets_x[i] *= -1
+            bounce_sound_effect.play()
         if bullet.x <= 0 and velocity_bullets_x[i]<0:
             velocity_bullets_x[i] *= -1
+            bounce_sound_effect.play()
         i+=1
     # ball collision with the rectangle (phase 1)
     if phase == 1:
@@ -237,6 +239,7 @@ while game_loop:
         for bullet in bullets:
             if bullet.colliderect(retangle_1):
                 velocity_bullets_y[i]*=-1
+                bounce_sound_effect.play()
                 velocity_bullets_x[i] = random.choice([3, -3])
                 pygame.time.delay(50)
 
@@ -244,11 +247,13 @@ while game_loop:
     # ball collision with the triangles (phase 2)
     elif phase == 2:
         i = 0
+        # middle triangle
         for bullet in bullets:
             if bullet.colliderect(triangle_3_rect) and (not deteccao_anterior[i]):
 
                 deteccao_anterior[i] = True
                 velocity_bullets_y[i] *= -1
+                bounce_sound_effect.play()
                 if velocity_bullets_x[i] == 0:
                     velocity_bullets_x[i] = random.choice([3, -3])
                 else:
@@ -256,12 +261,14 @@ while game_loop:
             elif (not bullet.colliderect(triangle_3_rect)) and deteccao_anterior[i]:
                 deteccao_anterior[i] = False
             i += 1
+        # left triangle
         i = 0
         for bullet in bullets:
             if bullet.colliderect(triangle_3_left_rect) and (not deteccao_anterior[i]):
 
                 deteccao_anterior[i] = True
                 velocity_bullets_y[i] *= -1
+                bounce_sound_effect.play()
                 if velocity_bullets_x[i] == 0:
                     velocity_bullets_x[i] = random.choice([3, -3])
                 else:
@@ -269,12 +276,14 @@ while game_loop:
             elif (not bullet.colliderect(triangle_3_left_rect)) and deteccao_anterior[i]:
                 deteccao_anterior[i] = False
             i += 1
+        # right triangle
         i=0
         for bullet in bullets:
             if bullet.colliderect(triangle_3_right_rect) and (not deteccao_anterior[i]):
 
                 deteccao_anterior[i] = True
                 velocity_bullets_y[i] *= -1
+                bounce_sound_effect.play()
                 if velocity_bullets_x[i] == 0:
                     velocity_bullets_x[i] = random.choice([3, -3])
                 else:
@@ -283,6 +292,7 @@ while game_loop:
 
                 deteccao_anterior[i] = False
             i += 1
+    
     elif phase == 3:
         i = 0
         for bullet in bullets:
@@ -290,6 +300,7 @@ while game_loop:
 
                 deteccao_anterior[i] = True
                 velocity_bullets_y[i] *= -1
+                bounce_sound_effect.play()
                 if velocity_bullets_x[i] == 0:
                     velocity_bullets_x[i] = random.choice([3, -3])
                 else:
