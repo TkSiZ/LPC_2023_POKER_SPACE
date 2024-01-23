@@ -124,7 +124,7 @@ def colisao_right_mid_triangle():
 
 def colision_left_mid_triangle():
     if len(colisions_left) <= 170:
-        for i in range(0,170, 10):
+        for i in range(0, 170, 10):
             x = pygame.draw.rect(screen, (255, 0, 0), (420 - i, scrn_y // 2 - 101 + i, 10, 10))
             colisions_left.append(x)
         return
@@ -217,6 +217,7 @@ diagonal_bottom_left_x = 80
 diagonal_bottom_left_y = scrn_y - 220
 diagonal_l_bot_obstacles = []
 
+
 def diagonal_l_bot():
     if len(diagonal_l_bot_obstacles) <= 12:
         for i in range(0, 120, 10):
@@ -240,13 +241,12 @@ def diagonal_r_top():
         return
 
 
-
-
 diagonal_top_left = pygame.image.load("assets/Diagonal_2.png")
 diagonal_top_left_x = diagonal_bottom_left_x
 diagonal_top_left_y = diagonal_top_right_y
 diagonal_top_left_rect = diagonal_top_left.get_rect(topleft=(diagonal_top_left_x, diagonal_top_left_y))
 diagonal_l_top_obstacles = []
+
 
 def diagonal_l_top():
     if len(diagonal_l_top_obstacles) <= 12:
@@ -254,6 +254,7 @@ def diagonal_l_top():
             x = pygame.draw.rect(screen, (255, 0, 0), (187 - i, 75 + i, 10, 10))
             diagonal_r_top_obstacles.append(x)
         return
+
 
 diagonal_bottom_right = pygame.image.load("assets/Diagonal_2.png")
 diagonal_bottom_right_x = diagonal_top_right_x
@@ -268,6 +269,7 @@ def diagonal_r_bot():
             x = pygame.draw.rect(screen, (255, 0, 0), (750 - i, 422 + i, 10, 10))
             diagonal_r_top_obstacles.append(x)
         return
+
 
 # Sound effects
 victory_sound_effect = pygame.mixer.Sound('assets/victory.wav')
@@ -362,6 +364,7 @@ while game_loop:
             # Adicione uma bala do inimigo
             enemy_bullet = pygame.Rect(image_copas_rect.centerx, image_copas_rect.centery, 8, 6)
             enemy_bullets.append(enemy_bullet)
+            shot_sound_effect.play()
 
             # Determine a direção do tiro do inimigo
             if p_left_x > image_copas_rect.left:
@@ -660,6 +663,7 @@ while game_loop:
             if bullet.colliderect(triangle_side_l):
                 velocity_bullets_x[i] *= -1
                 bullet.x -= 5
+                bounce_sound_effect.play()
             i += 1
 
         i = 0
@@ -667,6 +671,7 @@ while game_loop:
             if bullet.colliderect(triangle_side_l_bot):
                 velocity_bullets_y[i] *= -1
                 bullet.y += 5
+                bounce_sound_effect.play()
             i += 1
 
         i = 0
@@ -674,6 +679,7 @@ while game_loop:
             if bullet.colliderect(triangle_side_r):
                 velocity_bullets_x[i] *= -1
                 bullet.x += 5
+                bounce_sound_effect.play()
             i += 1
 
         i = 0
@@ -681,6 +687,7 @@ while game_loop:
             if bullet.colliderect(triangle_side_top):
                 velocity_bullets_y[i] *= -1
                 bullet.y -= 5
+                bounce_sound_effect.play()
             i += 1
 
         for colision in colisions_right:
@@ -689,6 +696,7 @@ while game_loop:
                 if bullet.colliderect(colision):
                     velocity_bullets_x[i] *= -1
                     bullet.x += 5
+                    bounce_sound_effect.play()
                 i += 1
         for colision in colisions_left:
             i = 0
@@ -696,6 +704,7 @@ while game_loop:
                 if bullet.colliderect(colision):
                     velocity_bullets_x[i] *= -1
                     bullet.x -= 5
+                    bounce_sound_effect.play()
                 i += 1
         for colision in colisions_full_left:
             i = 0
@@ -704,10 +713,12 @@ while game_loop:
                     velocity_bullets_y[i] *= -1
                     velocity_bullets_x[i] *= 0.7
                     bullet.x += 5
+                    bounce_sound_effect.play()
 
                 elif bullet.colliderect(colision):
                     velocity_bullets_x[i] *= -1
                     bullet.x += 5
+                    bounce_sound_effect.play()
                 i += 1
         for colision in colisions_full_right:
             i = 0
@@ -715,12 +726,14 @@ while game_loop:
                 if bullet.colliderect(colision):
                     velocity_bullets_x[i] *= -1
                     bullet.x -= 5
+                    bounce_sound_effect.play()
                 i += 1
         i = 0
         for bullet in bullets:
             if bullet.colliderect(bottom):
                 velocity_bullets_y[i] *= -1
                 bullet.y += 5
+                bounce_sound_effect.play()
             i += 1
         i = 0
 
@@ -730,6 +743,7 @@ while game_loop:
             if bullet.colliderect(triangle_side_l):
                 enemy_velocity_bullets_x[i] *= -1
                 bullet.x -= 5
+                bounce_sound_effect.play()
             i += 1
 
         i = 0
@@ -737,6 +751,7 @@ while game_loop:
             if bullet.colliderect(triangle_side_l_bot):
                 enemy_velocity_bullets_y[i] *= -1
                 bullet.y += 5
+                bounce_sound_effect.play()
             i += 1
 
         i = 0
@@ -744,6 +759,7 @@ while game_loop:
             if bullet.colliderect(triangle_side_r):
                 enemy_velocity_bullets_x[i] *= -1
                 bullet.x += 5
+                bounce_sound_effect.play()
             i += 1
 
         i = 0
@@ -751,6 +767,7 @@ while game_loop:
             if bullet.colliderect(triangle_side_top):
                 enemy_velocity_bullets_y[i] *= -1
                 bullet.y -= 5
+                bounce_sound_effect.play()
             i += 1
 
         for colision in colisions_right:
@@ -759,6 +776,7 @@ while game_loop:
                 if bullet.colliderect(colision):
                     enemy_velocity_bullets_x[i] *= -1
                     bullet.x += 5
+                    bounce_sound_effect.play()
                 i += 1
         for colision in colisions_left:
             i = 0
@@ -766,6 +784,7 @@ while game_loop:
                 if bullet.colliderect(colision):
                     enemy_velocity_bullets_x[i] *= -1
                     bullet.x -= 5
+                    bounce_sound_effect.play()
                 i += 1
         for colision in colisions_full_left:
             i = 0
@@ -774,10 +793,12 @@ while game_loop:
                     enemy_velocity_bullets_y[i] *= -1
                     enemy_velocity_bullets_x[i] *= 0.7
                     bullet.x += 5
+                    bounce_sound_effect.play()
 
                 elif bullet.colliderect(colision):
                     enemy_velocity_bullets_x[i] *= -1
                     bullet.x += 5
+                    bounce_sound_effect.play()
                 i += 1
         for colision in colisions_full_right:
             i = 0
@@ -785,17 +806,15 @@ while game_loop:
                 if bullet.colliderect(colision):
                     enemy_velocity_bullets_x[i] *= -1
                     bullet.x -= 5
+                    bounce_sound_effect.play()
                 i += 1
         i = 0
         for bullet in enemy_bullets:
             if bullet.colliderect(bottom):
                 enemy_velocity_bullets_y[i] *= -1
                 bullet.y += 5
+                bounce_sound_effect.play()
             i += 1
-
-
-
-
 
     elif phase == 3:
 
@@ -934,6 +953,7 @@ while game_loop:
                 if bullet.colliderect(diagonal):
                     velocity_bullets_x[i] *= -1
                     bullet.x -= 5
+                    bounce_sound_effect.play()
                 i += 1
         for diagonal in diagonal_r_bot_obstacles:
             i = 0
@@ -941,6 +961,7 @@ while game_loop:
                 if bullet.colliderect(diagonal):
                     velocity_bullets_x[i] *= -1
                     bullet.x -= 5
+                    bounce_sound_effect.play()
                 i += 1
         for diagonal in diagonal_l_top_obstacles:
             i = 0
@@ -948,6 +969,7 @@ while game_loop:
                 if bullet.colliderect(diagonal):
                     velocity_bullets_x[i] *= -1
                     bullet.x += 5
+                    bounce_sound_effect.play()
                 i += 1
         for diagonal in diagonal_l_bot_obstacles:
             i = 0
@@ -955,6 +977,7 @@ while game_loop:
                 if bullet.colliderect(diagonal):
                     velocity_bullets_x[i] *= -1
                     bullet.x += 5
+                    bounce_sound_effect.play()
                 i += 1
         square_4_pos_x += square_4_movimentation
         if square_4_pos_x < 0 or square_4_pos_x + square_4_x > scrn_x:
@@ -967,14 +990,17 @@ while game_loop:
         for bullet in bullets:
             if bullet.colliderect(square_4):
                 velocity_bullets_x[i] *= -1
+                bounce_sound_effect.play()
             if bullet.colliderect(square_4) and bullet.y <= square_4_x + square_4_pos_x:
                 bullet.y += 5
                 velocity_bullets_x[i] *= -1
                 velocity_bullets_y[i] *= -1
+                bounce_sound_effect.play()
             if bullet.colliderect(square_4) and bullet.y + 5 >= square_4_x:
                 bullet.y -= 5
                 velocity_bullets_x[i] *= -1
                 velocity_bullets_y[i] *= -1
+                bounce_sound_effect.play()
             i += 1
         # enemy
         for diagonal in diagonal_r_top_obstacles:
@@ -983,6 +1009,7 @@ while game_loop:
                 if bullet.colliderect(diagonal):
                     enemy_velocity_bullets_x[i] *= -1
                     bullet.x -= 5
+                    bounce_sound_effect.play()
                 i += 1
         for diagonal in diagonal_r_bot_obstacles:
             i = 0
@@ -990,6 +1017,7 @@ while game_loop:
                 if bullet.colliderect(diagonal):
                     enemy_velocity_bullets_x[i] *= -1
                     bullet.x -= 5
+                    bounce_sound_effect.play()
                 i += 1
         for diagonal in diagonal_l_top_obstacles:
             i = 0
@@ -997,6 +1025,7 @@ while game_loop:
                 if bullet.colliderect(diagonal):
                     enemy_velocity_bullets_x[i] *= -1
                     bullet.x += 5
+                    bounce_sound_effect.play()
                 i += 1
         for diagonal in diagonal_l_bot_obstacles:
             i = 0
@@ -1004,19 +1033,23 @@ while game_loop:
                 if bullet.colliderect(diagonal):
                     enemy_velocity_bullets_x[i] *= -1
                     bullet.x += 5
+                    bounce_sound_effect.play()
                 i += 1
         i = 0
         for bullet in enemy_bullets:
             if bullet.colliderect(square_4):
                 enemy_velocity_bullets_x[i] *= -1
+                bounce_sound_effect.play()
             if bullet.colliderect(square_4) and bullet.y <= square_4_x + square_4_pos_x:
                 bullet.y -= 5
                 enemy_velocity_bullets_x[i] *= -1
                 enemy_velocity_bullets_y[i] *= -1
+                bounce_sound_effect.play()
             if bullet.colliderect(square_4) and bullet.y + 5 >= square_4_x:
                 bullet.y += 5
                 enemy_velocity_bullets_x[i] *= -1
                 enemy_velocity_bullets_y[i] *= -1
+                bounce_sound_effect.play()
             i += 1
     # ball collision with the lower wall player 1
     i = 0
