@@ -314,9 +314,11 @@ while game_loop:
     for bullet, v_bullet_y in zip(bullets, velocity_bullets_y):
         if (bullet.y + bullet.height) >= 640:
             velocity_bullets_y[i] *= -1
+            bounce_sound_effect.play()
             #velocity_bullets_x[i] = random.choice([2, -2])
         if (bullet.y + bullet.height) <= 0:
             velocity_bullets_y[i] *= -1
+            bounce_sound_effect.play()
             #velocity_bullets_x[i] = random.choice([2, -2])
         i+=1
     # ball collision with the player 1
