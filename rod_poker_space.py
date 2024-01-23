@@ -154,7 +154,7 @@ diagonal_bottom_right_y = diagonal_bottom_left_y
 # Sound effects
 # victory_sound_effect = pygame.mixer.Sound('...')
 # lost_sound_effect = pygame.mixer.Sound('...')
-# shot_sound_effect = pygame.mixer.Sound('...')
+shot_sound_effect = pygame.mixer.Sound('assets/shot.wav')
 # bounce_sound_effect = pygame.mixer.Sound('assets/bounce.wav')
 
 # Player 1
@@ -210,7 +210,7 @@ while game_loop:
                 velocity_bullets_y.append(-5)
                 velocity_bullets_x.append(0)
                 deteccao_anterior.append(False)
-
+                shot_sound_effect.play()
 
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_LEFT:
